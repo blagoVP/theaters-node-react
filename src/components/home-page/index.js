@@ -1,15 +1,14 @@
 import React from 'react';
-import Header from '../header';
+import PageLayout from '../page-layout';
 import PlaysGuest from '../plays-guest';
 import PlaysUser from '../plays-user';
-import Footer from '../footer';
 
 const HomePage = () => {
   return (
     <div>
-      <Header />
+      <PageLayout>
       <PlaysUser />
-      <Footer />
+      </PageLayout>
     </div>
   )
 }
