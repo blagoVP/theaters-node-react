@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Info from '../info';
-import Link from '../link';
+import LinkComponent from '../link';
 
 class PlaysUser extends Component {
 
@@ -21,9 +21,9 @@ class PlaysUser extends Component {
                 <div className="aux">
                     <h1>Available Plays</h1>
                     <div className="home-buttons">
-                        <Link className="btn create-play" href="#" title="Create Theater"/>
-                        <Link className="btn create-play" href="#" title="Sort by Date"/>    
-                        <Link className="btn create-play" href="#" title="Sort by Likes"/>           
+                        <LinkComponent className="btn create-play" href="#" title="Create Theater"/>
+                        <LinkComponent className="btn create-play" href="#" title="Sort by Date"/>    
+                        <LinkComponent className="btn create-play" href="#" title="Sort by Likes"/>           
                     </div>
                 </div>
                 <div className="theaters-container">
