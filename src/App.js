@@ -2,7 +2,7 @@ import React from 'react'
 import HomePage from './components/home-page'
 import Register from './components/register'
 import Login from './components/login'
-import NotFound from './components/not-found-page'
+import NotFound from './components/pages/not-found-page'
 import {
   BrowserRouter,
   Switch,

@@ -1,5 +1,5 @@
 import React from 'react'
-import PageLayout from '../page-layout'
+import PageLayout from '../../page-layout'
 
 const NotFound = () => {
     return (
