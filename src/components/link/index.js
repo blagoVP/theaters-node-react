@@ -1,10 +1,14 @@
-import React from 'react';
+import React from 'react'
+import {
+    BrowserRouter, 
+    Link
+} from 'react-router-dom'
 
-const Link = ({title, href}) => {
+const LinkComponent = ({title, href}) => {
 
     return (
-        <a href={href}>{title}</a>
+        <Link to={href}>{title}</Link>
     )
 }
 
-export default Link;
+export default LinkComponent;
