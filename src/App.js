@@ -1,7 +1,7 @@
 import React from 'react'
-import HomePage from './components/home-page'
-import Register from './components/register'
-import Login from './components/login'
+import HomePage from './components/pages/home-page'
+import Register from './components/pages/register'
+import Login from './components/pages/login'
 import NotFound from './components/pages/not-found-page'
 import {
   BrowserRouter,

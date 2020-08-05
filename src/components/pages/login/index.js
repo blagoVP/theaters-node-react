@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import PageLayout from '../page-layout'
-import Input from '../input'
-import SubmitBtn from '../button-submit'
+import PageLayout from '../../page-layout'
+import Input from '../../input'
+import SubmitBtn from '../../button-submit'
 
 class Login extends Component {
 
