@@ -4,7 +4,7 @@ const Input = ({ label, id, value, onChange, type}) => {
     return (
         <div className="on-dark">
             <label htmlFor={id}>{label}:</label>
-            <input type={type} placeholder="********" value={value} onChange={onchange} ></input>
+            <input type={type} value={value} onChange={onChange} ></input>
             {/* if condition for the placeholder */}
         </div>
     )
