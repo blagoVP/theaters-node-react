@@ -1,73 +1,58 @@
-import React, { Component } from 'react'
+import React, { useState, useContext } from 'react'
 import PageLayout from '../../page-layout'
 import Input from '../../input'
 import SubmitBtn from '../../button-submit'
 import authenticate from '../../../utils/authenticate'
 import UserContext from '../../../Context'
 
-class Login extends Component {
+const Login = (props) => {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            username: "",
-            password: "",
-        }
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
+
+    const context = useContext(UserContext)
+
+    const handleUsername = (event) => {
+
+        setUsername(event.target.value) 
     }
 
-    static contextType = UserContext
-
-    handleChange = (event, type) => {
-        const newState = {}
-        newState[type] = event.target.value
-
-        this.setState(newState)
+    const handlePassword = (event) => {
+        setPassword(event.target.value)
     }
 
-    handleSubmit = async (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
 
-        const {
-            username,
-            password
-        } = this.state
-
         //validationa if username and password are empty, don't send request
-        console.log(this.context)
+        console.log(context)
         await authenticate('http://localhost:9999/api/user/login', {
             username,
             password
         }, (user) => {
-            this.context.logIn(user)
-            this.props.history.push('/')
+            context.logIn(user)
+            props.history.push('/')
         }, (e) => {
             console.log('ERROR', e)
         })
     }
 
-    render() {
-
-        const {
-            username,
-            password,
-        } = this.state
-
         return (
             <PageLayout >
-                <form onSubmit={this.handleSubmit}>
+                <form onSubmit={handleSubmit}>
                     <h2>Login</h2>
                     <Input
                         label="Username"
                         id="username"
                         value={username}
-                        onChange={(e) => this.handleChange(e, 'username')}
+                        onChange={(e) => handleUsername(e)}
                         type="text"
                     />
                     <Input
                         label="Password"
                         id="password"
                         value={password}
-                        onChange={(e) => this.handleChange(e, 'password')}
+                        onChange={(e) =>  handlePassword(e)}
                         type="password"
                     />
                     <SubmitBtn title="Login" />
@@ -75,6 +60,6 @@ class Login extends Component {
             </PageLayout >
         )
     }
-}
+
 
 export default Login
