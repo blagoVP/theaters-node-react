@@ -2,6 +2,7 @@ import React from 'react'
 import HomePage from './components/pages/home-page'
 import Register from './components/pages/register'
 import Login from './components/pages/login'
+import Logout from './components/logout'
 import NotFound from './components/pages/not-found-page'
 import {
   BrowserRouter,
@@ -18,6 +19,7 @@ const Navigation = () => {
       <Route path="/" exact component={HomePage} />
       <Route path="/register" component={Register} />
       <Route path="/login" component={Login} />
+      <Route path="/logout" component={Logout} />
       <Route component={NotFound} />
       </Switch>
     </BrowserRouter>

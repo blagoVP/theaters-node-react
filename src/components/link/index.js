@@ -4,10 +4,10 @@ import {
     Link
 } from 'react-router-dom'
 
-const LinkComponent = ({title, href}) => {
+const LinkComponent = ({title, href, styleClass}) => {
 
     return (
-        <Link to={href}>{title}</Link>
+        <Link className={styleClass} to={href}>{title}</Link>
     )
 }
 

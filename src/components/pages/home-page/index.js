@@ -1,57 +1,49 @@
-import React, { Component } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PageLayout from '../../page-layout';
 import PlaysGuest from '../../plays-guest';
 import PlaysUser from '../../plays-user';
 import UserContext from '../../../Context'
 
-class HomePage extends Component {
+const HomePage = () => {
 
-  constructor(props){
-    super(props)
+  const [plays, setPlays] = useState([]);
 
-    this.state = {
-      plays: []
-    }
-  }
-
-static contextType = UserContext
-
-  componentDidMount(){
-    console.log(this.context)
-    fetch('http://localhost:9999/api/home/').then((res) =>{
-      res.json().then((data)=>{
+  useEffect(()=>{
+  fetch('http://localhost:9999/api/home/').then((res) => {
+      res.json().then((data) => {
         const plays = data.slice(0, 3)//this should be removed, after api get fixed
-        this.setState({
-          plays
-        })   
-        console.log(this.state.plays) 
+        setPlays(plays)
+        console.log(plays)
       })
     })
-  }
+  }, [])
 
-  render() {
-    const {
+  const context = useContext(UserContext)
+
+  const {
       loggedIn,
       user
-    } = this.context
-    if (loggedIn){
+    } = context
+
+
+    if (loggedIn) {
       return (
         <div>
-          <PageLayout>
-            <PlaysUser />
+          <PageLayout >
+            <PlaysUser plays={plays} />
           </PageLayout>
         </div>
       )
     } else {
-        return (
-      <div>
-        <PageLayout>
-          <PlaysGuest />
-        </PageLayout>
-      </div>
-    )
+      return (
+        <div>
+          <PageLayout>
+            <PlaysGuest plays={plays} />
+          </PageLayout>
+        </div>
+      )
     }
   }
-}
+
 
 export default HomePage;
