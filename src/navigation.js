@@ -3,6 +3,8 @@ import HomePage from './components/pages/home-page'
 import Register from './components/pages/register'
 import Login from './components/pages/login'
 import Logout from './components/logout'
+import CreateTheater from './components/pages/create-theater-page'
+import DetailsPage from './components/pages/details-page'
 import NotFound from './components/pages/not-found-page'
 import {
   BrowserRouter,
@@ -20,6 +22,8 @@ const Navigation = () => {
       <Route path="/register" component={Register} />
       <Route path="/login" component={Login} />
       <Route path="/logout" component={Logout} />
+      <Route path="/create" component={CreateTheater} />
+      <Route path="/details" component={DetailsPage} />
       <Route component={NotFound} />
       </Switch>
     </BrowserRouter>

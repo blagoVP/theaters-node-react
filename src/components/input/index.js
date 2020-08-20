@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Input = ({ label, id, value, onChange, type}) => {
+const Input = ({ label, id, value, onChange, type, styleClass}) => {
     return (
-        <div className="on-dark">
+        <div className={styleClass}>
             <label htmlFor={id}>{label}:</label>
             <input type={type} value={value} onChange={onChange} ></input>
             {/* if condition for the placeholder */}
