@@ -52,6 +52,7 @@ const Register = (props) => {
                         value={username}
                         onChange={(e) => handleUsername(e)}
                         type="text"
+                        styleClass="on-dark"
                     />
                     <Input
                         label="Password"
@@ -59,6 +60,7 @@ const Register = (props) => {
                         value={password}
                         onChange={(e) => handlePassword(e)}
                         type="password"
+                        styleClass="on-dark"
                     />
                     <Input
                         label="Repeat Password"
@@ -66,6 +68,7 @@ const Register = (props) => {
                         value={repeatPassword}
                         onChange={(e) => handleRePassword(e)}
                         type="password"
+                        styleClass="on-dark"
                     />
                     <SubmitBtn title="Register" />
                 </form>

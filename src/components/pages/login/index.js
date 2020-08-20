@@ -47,6 +47,7 @@ const Login = (props) => {
                         value={username}
                         onChange={(e) => handleUsername(e)}
                         type="text"
+                        styleClass="on-dark"
                     />
                     <Input
                         label="Password"
@@ -54,6 +55,7 @@ const Login = (props) => {
                         value={password}
                         onChange={(e) =>  handlePassword(e)}
                         type="password"
+                        styleClass="on-dark"
                     />
                     <SubmitBtn title="Login" />
                 </form>

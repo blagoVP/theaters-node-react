@@ -1,16 +1,9 @@
 import React, { Component } from 'react';
 import Info from '../info';
+import { Link } from 'react-router-dom'
 import LinkComponent from '../link';
 
 const PlaysUser = (props) => {
-
-    // constructor(props) {
-    //     super(props);
-
-    //     this.state = {
-    //         plays: []
-    //     }
-    // };
 
     const renderPlays = () => {
         const plays = props.plays
@@ -26,7 +19,7 @@ const PlaysUser = (props) => {
                     <div className="info">
                         <h4>{play.title}</h4>
                         <div className="info-buttons">
-                            <a className="btn details" href="">Details</a>
+                            <LinkComponent styleClass="btn details" href="/details" title="Details" />
                             <span className="likes">{likesCounter} likes</span>
                         </div>
                     </div>
@@ -36,24 +29,24 @@ const PlaysUser = (props) => {
 
     }
 
-        return (
-            <main>
-                <Info />
-                <section>
-                    <div className="aux">
-                        <h1>Available Plays</h1>
-                        <div className="home-buttons">
-                            <LinkComponent styleClass="btn create-play" href="#" title="Create Theater" />
-                            <LinkComponent styleClass="btn create-play" title="Sort by Date" />
-                            <LinkComponent styleClass="btn create-play" title="Sort by Likes" />
-                        </div>
+    return (
+        <main>
+            <Info />
+            <section>
+                <div className="aux">
+                    <h1>Available Plays</h1>
+                    <div className="home-buttons">
+                        <LinkComponent styleClass="btn create-play" href="/create" title="Create Theater" />
+                        <LinkComponent styleClass="btn create-play" title="Sort by Date" />
+                        <LinkComponent styleClass="btn create-play" title="Sort by Likes" />
                     </div>
-                    <div className="theaters-container">
-                        {renderPlays()}
-                    </div>
-                </section>
-            </main>
-        )
-    }
+                </div>
+                <div className="theaters-container">
+                    {renderPlays()}
+                </div>
+            </section>
+        </main>
+    )
+}
 
 export default PlaysUser
