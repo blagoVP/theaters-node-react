@@ -1,7 +1,10 @@
-import React, { Component } from 'react';
-import Info from '../info';
+import React, { Component } from 'react'
+import Info from '../info'
+import Compare from '../../utils/compare'
 
 const PlaysGuest = ({plays}) => {
+
+    plays.sort(Compare.compareLikes).splice(3)
 
     const renderPlays = () => {
         

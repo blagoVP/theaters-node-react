@@ -11,16 +11,18 @@ const CreateTheater = (props) => {
     const [description, setDescription] = useState("")
     const [imageUrl, setImageUrl] = useState("")
 
-    // useEffect(()=>{
-        //fetch play data on mounting
-    //     fetch('http://localhost:9999/api/home/').then((res) => {
-    //         res.json().then((data) => {
-    //           const plays = data.slice(0, 3)//this should be removed, after api get fixed
-    //           setPlays(plays)
-    //           console.log(plays)
-    //         })
-    //       })
-    //     }, [])
+    const id = props.match.params.id
+    
+    useEffect(() => {
+
+        fetch(`http://localhost:9999/api/unit/edit-play/${id}`).then((res) => {
+          res.json().then((data) => {
+           setTitle(data.title)
+           setDescription(data.description)
+           setImageUrl(data.imageUrl)
+          })
+        })
+      }, [])
 
     const context = useContext(UserContext)
 
@@ -38,18 +40,27 @@ const CreateTheater = (props) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        console.log('Edit Edit :D')
         //validationa if username and password are empty, don't send request
 
-        // await authenticate('http://localhost:9999/api/user/login', {
-        //     username,
-        //     password
-        // }, (user) => {
-        //     context.logIn(user)
-        //     props.history.push('/')
-        // }, (e) => {
-        //     console.log('ERROR', e)
-        // })
+        fetch(`http://localhost:9999/api/unit/edit-play/${id}`, {
+            method: "POST",
+            body: JSON.stringify({
+                title,
+                description,
+                imageUrl
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(promise => {
+            return promise.json()
+        }).then(response => {
+            props.history.push('/')
+        }).catch(err => {
+            console.log(err)
+        })
+
+
     }
 
     return (
@@ -62,7 +73,6 @@ const CreateTheater = (props) => {
                     value={title}
                     onChange={(e) => handleTitle(e)}
                     type="text"
-                    styleClass=""
                 />
                 <TextArea
                 label="Theater Description"
@@ -76,7 +86,6 @@ const CreateTheater = (props) => {
                     value={imageUrl}
                     onChange={(e) => handleImageUrl(e)}
                     type="text"
-                    styleClass=""
                 />
                 <SubmitBtn title="Edit" />
             </form>
