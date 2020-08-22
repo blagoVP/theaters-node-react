@@ -25,20 +25,29 @@ const CreateTheater = (props) => {
         setImageUrl(event.target.value)
     }
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault()
-        console.log('SUBmit Submit :D')
-        //validationa if username and password are empty, don't send request
 
-        // await authenticate('http://localhost:9999/api/user/login', {
-        //     username,
-        //     password
-        // }, (user) => {
-        //     context.logIn(user)
-        //     props.history.push('/')
-        // }, (e) => {
-        //     console.log('ERROR', e)
-        // })
+        const body = {
+            title,
+            description,
+            imageUrl,
+            _id: context.user._id
+        }
+
+        fetch('http://localhost:9999/api/unit/create-play', {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(promise => {
+            return promise.json()
+        }).then(response => {
+            props.history.push('/')
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
     return (
@@ -51,7 +60,6 @@ const CreateTheater = (props) => {
                     value={title}
                     onChange={(e) => handleTitle(e)}
                     type="text"
-                    styleClass=""
                 />
                 <TextArea
                     label="Theater Description"
@@ -65,7 +73,6 @@ const CreateTheater = (props) => {
                     value={imageUrl}
                     onChange={(e) => handleImageUrl(e)}
                     type="text"
-                    styleClass=""
                 />
                 <SubmitBtn title="Create" />
             </form>

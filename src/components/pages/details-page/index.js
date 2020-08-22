@@ -1,29 +1,57 @@
-import React, { useState, useContext, useEffect } from 'react';
-import PageLayout from '../../page-layout';
+import React, { useState, useContext, useEffect } from 'react'
+import PageLayout from '../../page-layout'
 import UserContext from '../../../Context'
+import LinkComponent from '../../link'
 
-const DetailsPage = () => {
+const DetailsPage = (props) => {
 
   const [play, setPlay] = useState({});
-
-  // useEffect(()=>{
-  //   fetch play data on mounting
-  // fetch('http://localhost:9999/api/home/').then((res) => {
-  //     res.json().then((data) => {
-  //       const plays = data.slice(0, 3)//this should be removed, after api get fixed
-  //       setPlays(plays)
-  //       console.log(plays)
-  //     })
-  //   })
-  // }, [])
+  const [isAlreadyLiked, setIsAlreadyLiked] = useState(false)
 
   const context = useContext(UserContext)
 
   const {
-    loggedIn,
     user
   } = context
 
+  const isCreater = user._id === play.creator
+  const id = props.match.params.id
+
+  useEffect(() => {
+
+    fetch(`http://localhost:9999/api/unit/details-play/${id}/?userId=${user._id}`).then((res) => {
+      res.json().then((data) => {
+        setPlay(data.play)
+        setIsAlreadyLiked(data.alreadyLiked)
+
+      })
+    })
+  }, [])
+
+  const handleLike = () => {
+    fetch(`http://localhost:9999/api/unit/like-play/${play._id}`, {
+      method: "POST",
+      body: JSON.stringify({
+        user: user._id
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(promise => promise.json().then((response) => {
+      console.log(response)
+      props.history.push('/')
+    })).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const handleDelete = () => {
+    console.log("Delete Delete")
+    fetch(`http://localhost:9999/api/unit/delete-play/${id}`).then((res) => {
+          console.log(res)
+          props.history.push('/')
+        }).catch((err) => console.log(err))
+  }
 
   return (
     <PageLayout>
@@ -31,22 +59,37 @@ const DetailsPage = () => {
         <div className="container">
 
           <section className="details">
-            <h1>Theater title: Who's Afraid of Virginia Woolf? by Edward Albee</h1>
+            <h1>{play.title}</h1>
             <div>
-              <img className="image" src="https://media.timeout.com/images/103727744/380/285/image.jpg" />
+              <img className="image" src={play.imageUrl} />
             </div>
           </section>
 
           <section className="details">
             <h3>Theater Description</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores, et ex. Dignissimos
-            voluptatum recusandae quos. Eum beatae soluta velit voluptas hic incidunt ab dolorem ipsam
-                        blanditiis laudantium. Distinctio, aliquam libero.</p>
+            <p>{play.description}</p>
             <div className="buttons">
-              <a className="btn delete" href="">Delete</a>
-              <a className="btn edit" href="">Edit</a>
-              <span className="liked">You have already liked this play!</span>
-              <a className="btn like" href="">Like</a>
+              {isCreater ? 
+              <LinkComponent 
+              styleClass="btn delete" 
+              href={props.myroute} 
+              title="Delete" 
+              onClick={handleDelete} 
+              ></LinkComponent> : null}
+              {isCreater ? <LinkComponent
+                styleClass="btn edit"
+                href={`/edit/${play._id}`}
+                title="Edit"
+              ></LinkComponent> : null}
+              {!isCreater && isAlreadyLiked ? 
+              <span className="liked">You have already liked this play!</span> : null}
+              {!isCreater && !isAlreadyLiked ? 
+              <LinkComponent
+                styleClass="btn like"
+                href={props.myroute}
+                title="Like"
+                onClick={handleLike}
+              ></LinkComponent> : null}
             </div>
           </section>
         </div>

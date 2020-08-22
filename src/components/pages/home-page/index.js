@@ -10,10 +10,8 @@ const HomePage = () => {
 
   useEffect(()=>{
   fetch('http://localhost:9999/api/home/').then((res) => {
-      res.json().then((data) => {
-        const plays = data.slice(0, 3)//this should be removed, after api get fixed
+      res.json().then((plays) => {
         setPlays(plays)
-        console.log(plays)
       })
     })
   }, [])
