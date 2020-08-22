@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import PageLayout from '../../page-layout'
 import UserContext from '../../../Context'
 import LinkComponent from '../../link'
+import getCookie from '../../../utils/cookie'
 
 const DetailsPage = (props) => {
 
@@ -16,10 +17,17 @@ const DetailsPage = (props) => {
 
   const isCreater = user._id === play.creator
   const id = props.match.params.id
+  const token = getCookie('x-auth-token')
 
   useEffect(() => {
 
-    fetch(`http://localhost:9999/api/unit/details-play/${id}/?userId=${user._id}`).then((res) => {
+    fetch(`http://localhost:9999/api/unit/details-play/${id}/?userId=${user._id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': token
+      }
+    }).then((res) => {
       res.json().then((data) => {
         setPlay(data.play)
         setIsAlreadyLiked(data.alreadyLiked)
@@ -47,10 +55,16 @@ const DetailsPage = (props) => {
 
   const handleDelete = () => {
     console.log("Delete Delete")
-    fetch(`http://localhost:9999/api/unit/delete-play/${id}`).then((res) => {
-          console.log(res)
-          props.history.push('/')
-        }).catch((err) => console.log(err))
+    fetch(`http://localhost:9999/api/unit/delete-play/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': token
+      }
+    }).then((res) => {
+      console.log(res)
+      props.history.push('/')
+    }).catch((err) => console.log(err))
   }
 
   return (
@@ -69,27 +83,27 @@ const DetailsPage = (props) => {
             <h3>Theater Description</h3>
             <p>{play.description}</p>
             <div className="buttons">
-              {isCreater ? 
-              <LinkComponent 
-              styleClass="btn delete" 
-              href={props.myroute} 
-              title="Delete" 
-              onClick={handleDelete} 
-              ></LinkComponent> : null}
+              {isCreater ?
+                <LinkComponent
+                  styleClass="btn delete"
+                  href={props.myroute}
+                  title="Delete"
+                  onClick={handleDelete}
+                ></LinkComponent> : null}
               {isCreater ? <LinkComponent
                 styleClass="btn edit"
                 href={`/edit/${play._id}`}
                 title="Edit"
               ></LinkComponent> : null}
-              {!isCreater && isAlreadyLiked ? 
-              <span className="liked">You have already liked this play!</span> : null}
-              {!isCreater && !isAlreadyLiked ? 
-              <LinkComponent
-                styleClass="btn like"
-                href={props.myroute}
-                title="Like"
-                onClick={handleLike}
-              ></LinkComponent> : null}
+              {!isCreater && isAlreadyLiked ?
+                <span className="liked">You have already liked this play!</span> : null}
+              {!isCreater && !isAlreadyLiked ?
+                <LinkComponent
+                  styleClass="btn like"
+                  href={props.myroute}
+                  title="Like"
+                  onClick={handleLike}
+                ></LinkComponent> : null}
             </div>
           </section>
         </div>
