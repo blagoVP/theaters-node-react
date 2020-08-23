@@ -3,25 +3,28 @@ import PageLayout from '../../page-layout'
 import UserContext from '../../../Context'
 import LinkComponent from '../../link'
 import getCookie from '../../../utils/cookie'
+import ErrorNotifications from '../../notifications'
 
 const DetailsPage = (props) => {
 
   const [play, setPlay] = useState({});
   const [isAlreadyLiked, setIsAlreadyLiked] = useState(false)
+  const [isCreater, setIsCreater] = useState(false)
+  const [message, setMessage] = useState(null)
 
   const context = useContext(UserContext)
-
   const {
     user
   } = context
 
-  const isCreater = user._id === play.creator
   const id = props.match.params.id
   const token = getCookie('x-auth-token')
 
   useEffect(() => {
-
-    fetch(`http://localhost:9999/api/unit/details-play/${id}/?userId=${user._id}`, {
+    const {
+      user
+    } = context
+    fetch(`http://localhost:9999/api/unit/details-play/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -29,10 +32,14 @@ const DetailsPage = (props) => {
       }
     }).then((res) => {
       res.json().then((data) => {
-        setPlay(data.play)
-        setIsAlreadyLiked(data.alreadyLiked)
 
+        setPlay(data)
+        setIsAlreadyLiked(JSON.stringify(data.usersLiked).includes(JSON.stringify(user._id)))
+        setIsCreater(user._id === data.creator)
       })
+    }).catch((err) => {
+      setMessage("Something went wrong")
+      console.log(err)
     })
   }, [])
 
@@ -43,12 +50,14 @@ const DetailsPage = (props) => {
         user: user._id
       }),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authorization': token
       }
     }).then(promise => promise.json().then((response) => {
       console.log(response)
       props.history.push('/')
     })).catch((err) => {
+      setMessage("Something went wrong")
       console.log(err)
     })
   }
@@ -64,11 +73,15 @@ const DetailsPage = (props) => {
     }).then((res) => {
       console.log(res)
       props.history.push('/')
-    }).catch((err) => console.log(err))
+    }).catch((err) => {
+      setMessage("Something went wrong")
+      console.log(err)
+    })
   }
 
   return (
     <PageLayout>
+      { message ? <ErrorNotifications message={message} /> : null}
       <main>
         <div className="container">
 

@@ -4,12 +4,14 @@ import Input from '../../input'
 import SubmitBtn from '../../button-submit'
 import authenticate from '../../../utils/authenticate'
 import UserContext from '../../../Context'
+import ErrorNotifications from '../../notifications'
 
 const Register = (props) => {
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [repeatPassword, setRepeatPassword] = useState("")
+    const [message, setMessage] = useState(null)
 
     const context = useContext(UserContext)
 
@@ -28,7 +30,21 @@ const Register = (props) => {
     const handleSubmit = async (event) => {
         event.preventDefault()
 
-        //validation if empty and if passwords match!!!
+       
+        if (!username || username.length <= 2) {
+            setMessage('username is required and must be more than 2 chars')
+            return
+        }
+
+        if (!password || password.length <= 3){
+            setMessage('password is required and must be more than 3 chars')
+            return
+        }
+
+        if (password !== repeatPassword) {
+            setMessage("Password don't match")
+            return
+        }
 
         await authenticate('http://localhost:9999/api/user/register', {
             username,
@@ -38,12 +54,14 @@ const Register = (props) => {
             context.logIn(user)
             props.history.push('/')
         }, (e) => {
+            setMessage(`${username} already exist`)
             console.log('ERROR', e)
         })
     }
 
         return (
             <PageLayout >
+                 { message ? <ErrorNotifications message={message} /> : null}
                 <form onSubmit={handleSubmit}>
                     <h2>Register</h2>
                     <Input

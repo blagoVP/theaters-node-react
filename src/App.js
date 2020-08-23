@@ -41,7 +41,7 @@ const App = (props) => {
                 logOut()
             }
         })
-    }, [])
+    })
 
     return (
         <UserContext.Provider value={{

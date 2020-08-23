@@ -3,16 +3,21 @@ import PageLayout from '../../page-layout';
 import PlaysGuest from '../../plays-guest';
 import PlaysUser from '../../plays-user';
 import UserContext from '../../../Context'
+import ErrorNotifications from '../../notifications'
 
 const HomePage = () => {
 
   const [plays, setPlays] = useState([]);
+  const [message, setMessage] = useState(null)
 
   useEffect(()=>{
   fetch('http://localhost:9999/api/home/').then((res) => {
       res.json().then((plays) => {
         setPlays(plays)
       })
+    }).catch((err) => {
+      setMessage("Something went wrong")
+      console.log(err)
     })
   }, [])
 
@@ -28,6 +33,7 @@ const HomePage = () => {
       return (
         <div>
           <PageLayout >
+          { message ? <ErrorNotifications message={message} /> : null}
             <PlaysUser plays={plays} />
           </PageLayout>
         </div>
@@ -35,7 +41,8 @@ const HomePage = () => {
     } else {
       return (
         <div>
-          <PageLayout>
+          <PageLayout >
+          { message ? <ErrorNotifications message={message} /> : null}
             <PlaysGuest plays={plays} />
           </PageLayout>
         </div>
