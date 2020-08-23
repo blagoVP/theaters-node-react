@@ -1,14 +1,14 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from '../header'
 import Footer from '../footer'
 
 const PageLayout = (props) => {
+
     return (
         <div >
-            <Header/>
-            {/* <Notifications/> */}
+            <Header />
             {props.children}
-            <Footer/>
+            <Footer />
         </div>
     )
 }

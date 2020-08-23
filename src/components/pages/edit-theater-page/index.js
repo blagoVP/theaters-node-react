@@ -4,23 +4,37 @@ import Input from '../../input'
 import TextArea from '../../textarea'
 import SubmitBtn from '../../button-submit'
 import UserContext from '../../../Context'
+import getCookie from '../../../utils/cookie'
+import ErrorNotifications from '../../notifications'
+import isUrl from '../../../utils/isUrl'
 
 const CreateTheater = (props) => {
 
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [imageUrl, setImageUrl] = useState("")
+    const [message, setMessage] = useState(null)
 
     const id = props.match.params.id
-    
+    const token = getCookie('x-auth-token')
+
     useEffect(() => {
 
-        fetch(`http://localhost:9999/api/unit/edit-play/${id}`).then((res) => {
+        fetch(`http://localhost:9999/api/unit/edit-play/${id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'authorization': token
+            }
+          }).then((res) => {
           res.json().then((data) => {
            setTitle(data.title)
            setDescription(data.description)
            setImageUrl(data.imageUrl)
           })
+        }).catch((err) =>{
+            console.log(err)
+            setMessage('Something went wrong')
         })
       }, [])
 
@@ -40,7 +54,21 @@ const CreateTheater = (props) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        //validationa if username and password are empty, don't send request
+
+        if (!title || title.length >= 20) {
+            setMessage('title is required and must be less than 20 chars')
+            return
+        }
+
+        if (!description || description.length >= 300){
+            setMessage('description is required and must be less than 300 chars')
+            return
+        }
+
+        if (!imageUrl || !isUrl(imageUrl)){
+            setMessage('ImageUrl is required and must be valid URL adress')
+            return
+        }
 
         fetch(`http://localhost:9999/api/unit/edit-play/${id}`, {
             method: "POST",
@@ -50,13 +78,15 @@ const CreateTheater = (props) => {
                 imageUrl
             }),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'authorization': token
             }
         }).then(promise => {
             return promise.json()
         }).then(response => {
             props.history.push('/')
         }).catch(err => {
+            setMessage("Something went wrong")
             console.log(err)
         })
 
@@ -64,7 +94,8 @@ const CreateTheater = (props) => {
     }
 
     return (
-        <PageLayout >
+        <PageLayout message={message} >
+             { message ? <ErrorNotifications message={message} /> : null}
             <form className="theater-form" onSubmit={handleSubmit}>
                 <h1>Create Theater</h1>
                 <Input

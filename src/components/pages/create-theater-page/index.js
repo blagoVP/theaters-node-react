@@ -4,14 +4,19 @@ import Input from '../../input'
 import TextArea from '../../textarea'
 import SubmitBtn from '../../button-submit'
 import UserContext from '../../../Context'
+import getCookie from '../../../utils/cookie'
+import ErrorNotifications from '../../notifications'
+import isUrl from '../../../utils/isUrl'
 
 const CreateTheater = (props) => {
 
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [imageUrl, setImageUrl] = useState("")
+    const [message, setMessage] = useState(null)
 
     const context = useContext(UserContext)
+    const token = getCookie('x-auth-token')
 
     const handleTitle = (event) => {
         setTitle(event.target.value)
@@ -28,6 +33,21 @@ const CreateTheater = (props) => {
     const handleSubmit = (event) => {
         event.preventDefault()
 
+        if (!title || title.length >= 20) {
+            setMessage('title is required and must be less than 20 chars')
+            return
+        }
+
+        if (!description || description.length >= 300){
+            setMessage('description is required and must be less than 300 chars')
+            return
+        }
+
+        if (!imageUrl || !isUrl(imageUrl)){
+            setMessage('ImageUrl is required and must be valid URL adress')
+            return
+        }
+
         const body = {
             title,
             description,
@@ -39,7 +59,8 @@ const CreateTheater = (props) => {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'authorization': token
             }
         }).then(promise => {
             return promise.json()
@@ -47,11 +68,13 @@ const CreateTheater = (props) => {
             props.history.push('/')
         }).catch(err => {
             console.log(err)
+            setMessage('Something went wrong!')
         })
     }
 
     return (
         <PageLayout >
+            { message ? <ErrorNotifications message={message} /> : null}
             <form className="theater-form" onSubmit={handleSubmit}>
                 <h1>Create Theater</h1>
                 <Input
