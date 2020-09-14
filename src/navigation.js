@@ -11,7 +11,8 @@ import NotFound from './components/pages/not-found-page'
 import {
   BrowserRouter,
   Switch,
-  Route
+  Route,
+  Redirect
 } from 'react-router-dom'
 
 const Navigation = () => {
@@ -27,10 +28,18 @@ const Navigation = () => {
         <Route path="/" exact component={HomePage} />
         <Route path="/register" component={Register} />
         <Route path="/login" component={Login} />
-        <Route path="/logout" component={ user ? Logout : Login} />
-        <Route path="/create" component={ user ? CreateTheater : Login} />
-        <Route path="/edit/:id" component={EditTheater} />
-        <Route path="/details/:id" component={DetailsPage} />
+        <Route path="/logout" >
+          {user ? (<Logout />) : (<Redirect to="/login" />)}
+        </Route>
+        <Route path="/create">
+          {user ? (<CreateTheater />) : (<Redirect to="/login" />)}
+        </Route>
+        <Route path="/edit/:id" >
+          {user ? (<EditTheater />) : (<Redirect to="/login" />)}
+        </Route>
+        <Route path="/details/:id" >
+          {user ? (<DetailsPage />) : (<Redirect to="/login" />)}
+        </Route>
         <Route component={NotFound} />
       </Switch>
     </BrowserRouter>
